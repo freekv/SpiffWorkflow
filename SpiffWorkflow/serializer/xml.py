@@ -127,6 +127,8 @@ class XmlSerializer(Serializer):
         value = value_elem.text
         if value is not None:
             return str(value)
+        elif value_elem is None or len(value_elem)==0:
+            return None
         value = value_elem[0]
         if value.tag == 'attribute':
             return Attrib.deserialize(self, value)
