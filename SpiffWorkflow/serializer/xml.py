@@ -124,20 +124,22 @@ class XmlSerializer(Serializer):
             parent_elem.append(value.serialize(self))
 
     def deserialize_value(self, value_elem):
+        if len(value_elem)!=0:
+            value = value_elem[0]
+            if value.tag == 'attribute':
+                logging.error("THIS SHOULD HAPPEN")
+                return Attrib.deserialize(self, value)
+            elif value.tag == 'path':
+                return PathAttrib.deserialize(self, value)
+            elif value.tag == 'assign':
+                return Assign.deserialize(self, value)
+            else:
+                raise ValueError('unsupported tag:', value.tag)
         value = value_elem.text
         if value is not None:
             return str(value)
-        elif value_elem is None or len(value_elem)==0:
+        elif value_elem is None:
             return None
-        value = value_elem[0]
-        if value.tag == 'attribute':
-            return Attrib.deserialize(self, value)
-        elif value.tag == 'path':
-            return PathAttrib.deserialize(self, value)
-        elif value.tag == 'assign':
-            return Assign.deserialize(self, value)
-        else:
-            raise ValueError('unsupported tag:', value.tag)
 
     def serialize_value_map(self, map_elem, thedict):
         """
