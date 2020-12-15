@@ -127,7 +127,6 @@ class XmlSerializer(Serializer):
         if len(value_elem)!=0:
             value = value_elem[0]
             if value.tag == 'attribute':
-                logging.error("THIS SHOULD HAPPEN")
                 return Attrib.deserialize(self, value)
             elif value.tag == 'path':
                 return PathAttrib.deserialize(self, value)
